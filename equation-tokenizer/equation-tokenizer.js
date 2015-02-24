@@ -7,12 +7,6 @@
         root.tokenize = definition();
     }
 })(this, function() {
-    function Token(value, type) {
-        this.value = value;
-        this.type = type;
-    }
-
-
     function tokenize(equation) {
         var tokens = [];
         var parentheses = [];
@@ -30,7 +24,7 @@
 
                 if (type !== _type) {
                     if (buffer.length) {
-                        tokens.push(new Token(buffer, type));
+                        tokens.push({ value: buffer, type: type });
                         buffer = '';
                     }
                     type = _type;
@@ -39,7 +33,7 @@
                 buffer += character;
             }
         });
-        tokens.push(new Token(buffer, type));
+        tokens.push({ value: buffer, type: type });
 
         return tokens;
     }
