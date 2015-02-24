@@ -1,0 +1,26 @@
+{
+  "name": "proglangs",
+  "version": "1.0.0",
+  "description": "modules that i will use in our programming languages class",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arnellebalane/proglangs.git"
+  },
+  "keywords": [
+    "programming",
+    "languages"
+  ],
+  "author": "Arnelle Balane <arnellebalane@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arnellebalane/proglangs/issues"
+  },
+  "homepage": "https://github.com/arnellebalane/proglangs",
+  "devDependencies": {
+    "jest-cli": "^0.4.0"
+  }
+}
