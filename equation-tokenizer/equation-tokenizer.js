@@ -9,7 +9,6 @@
 })(this, function() {
     function tokenize(equation) {
         var tokens = [];
-        var parentheses = [];
         var buffer = '';
         var type = 'equation';
 
@@ -17,13 +16,14 @@
             if (character.trim().length) {
                 var _type = 'equation';
                 if (character.match(/\d/)) {
-                    _type = 'operator';
+                    _type = 'operand';
                 } else if (character.match(/[+*\/-]/)) {
-                    _type = 'operation';
+                    _type = 'operator';
                 }
 
                 if (type !== _type) {
                     if (buffer.length) {
+                        buffer = buffer.match(/\d+/g) ? +buffer : buffer;
                         tokens.push({ value: buffer, type: type });
                         buffer = '';
                     }
