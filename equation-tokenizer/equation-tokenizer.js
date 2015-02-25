@@ -2,12 +2,12 @@
     if (typeof define === 'function' && define.amd) {
         define([], definition);
     } else if (typeof exports === 'object') {
-        module.exports = definition;
+        module.exports = definition();
     } else {
         root.tokenize = definition();
     }
 })(this, function() {
-    function tokenize(equation) {
+    function tokenize(equation, label) {
         var tokens = [];
         var buffer = '';
         var type = 'equation';
@@ -24,7 +24,7 @@
                 if (type !== _type) {
                     if (buffer.length) {
                         buffer = buffer.match(/\d+/g) ? +buffer : buffer;
-                        tokens.push({ value: buffer, type: type });
+                        tokens.push(label ? { value: buffer, type: type } : buffer);
                         buffer = '';
                     }
                     type = _type;
@@ -33,7 +33,8 @@
                 buffer += character;
             }
         });
-        tokens.push({ value: buffer, type: type });
+        buffer = buffer.match(/\d+/g) ? +buffer : buffer;
+        tokens.push(label ? { value: buffer, type: type } : buffer);
 
         return tokens;
     }
