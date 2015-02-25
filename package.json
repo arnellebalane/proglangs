@@ -4,7 +4,7 @@
   "description": "modules that i will use in our programming languages class",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha -R spec '*/test/*.js'"
+    "test": "node_modules/.bin/mocha -R spec '*/tests/*.js'"
   },
   "repository": {
     "type": "git",
