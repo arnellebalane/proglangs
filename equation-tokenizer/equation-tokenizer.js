@@ -11,6 +11,7 @@
         var tokens = [];
         var buffer = '';
         var type = 'equation';
+        var parentheses = 0;
 
         equation.split('').forEach(function(character) {
             if (character.trim().length) {
@@ -21,8 +22,8 @@
                     _type = 'operator';
                 }
 
-                if (type !== _type) {
-                    if (buffer.length) {
+                if (type !== _type && !parentheses) {
+                    if (buffer) {
                         buffer = buffer.match(/\d+/g) ? +buffer : buffer;
                         tokens.push(label ? { value: buffer, type: type } : buffer);
                         buffer = '';
@@ -32,9 +33,27 @@
 
                 buffer += character;
             }
+
+            if (character === '(') {
+                parentheses++;
+            } else if (character === ')') {
+                if (!parentheses) {
+                    throw new Error('Parenthesis Mismatched.');
+                } else if (!--parentheses) {
+                    buffer = buffer.substring(1, buffer.length - 1);
+                    var value = tokenize(buffer, label);
+                    tokens.push(label ? { value: value, type: type } : value);
+                    buffer = '';
+                }
+            }
         });
-        buffer = buffer.match(/\d+/g) ? +buffer : buffer;
-        tokens.push(label ? { value: buffer, type: type } : buffer);
+
+        if (parentheses) {
+            throw new Error('Parenthesis Mismatched.');
+        } else if (buffer) {
+            buffer = buffer.match(/\d+/g) ? +buffer : buffer;
+            tokens.push(label ? { value: buffer, type: type } : buffer);
+        }
 
         return tokens;
     }
