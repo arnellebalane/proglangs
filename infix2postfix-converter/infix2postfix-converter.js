@@ -31,7 +31,7 @@
                     stack.push(token);
                 } else {
                     var top = stack.pop();
-                    if (precedence(token.value, top.value) <= 0) {
+                    if (precedence(token.value, top.value) < 0) {
                         stack.push(top, token);
                     } else {
                         stack.push(token);
