@@ -107,4 +107,11 @@ describe('Equation Tokenizer', function() {
         expect(open).to.throwException(/Parenthesis Mismatched/);
         expect(close).to.throwException(/Parenthesis Mismatched/);
     });
+
+    it('should be able to tokenize equations that do not contain spaces', function() {
+        var given = '1*(2+3)';
+        var expected = [1, '*', [2, '+', 3]];
+        var actual = tokenize(given);
+        expect(actual).to.eql(expected);
+    });
 });
