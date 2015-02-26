@@ -1,12 +1,13 @@
 (function(root, definition) {
     if (typeof define === 'function' && define.amd) {
-        define([], definition);
+        define(['equation-tokenizer/equation-tokenizer'], definition);
     } else if (typeof exports === 'object') {
-        module.exports = definition();
+        var tokenize = require('../equation-tokenizer/equation-tokenizer');
+        module.exports = definition(tokenize);
     } else {
-        root.calculate_postfix = definition();
+        root.calculate_postfix = definition(root.tokenize_equation);
     }
-})(this, function() {
+})(this, function(tokenize) {
     function evaluate(a, operator, b) {
         if (operator === '+') {
             return a + b;
@@ -22,15 +23,16 @@
 
 
     function calculate(postfix) {
+        var tokens = postfix instanceof Array ? postfix : tokenize(postfix, true);
         var stack = [];
 
-        postfix.forEach(function(token) {
+        tokens.forEach(function(token) {
             if (token.type === 'operand') {
                 stack.push(token);
             } else if (token.type === 'operator') {
                 var b = stack.pop();
                 var a = stack.pop();
-                if (a.type !== 'operand' || b.type !== 'operand') {
+                if (!a || !b || a.type !== 'operand' || b.type !== 'operand') {
                     throw new Error('Invalid Postfix Statement.');
                 }
                 var result = evaluate(a.value, token.value, b.value);
