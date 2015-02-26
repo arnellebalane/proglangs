@@ -6,7 +6,7 @@ describe('Equation Tokenizer', function() {
     it('should always return an array of tokens', function() {
         var given = '1 + 2';
         var actual = tokenize(given);
-        expect(actual).to.be.an(Array);
+        expect(actual).to.be.an('array');
     });
 
     it('should be able to tokenize without labels given equations with single-digit values', function() {
