@@ -5,7 +5,7 @@
         var tokenize = require('../equation-tokenizer/equation-tokenizer');
         module.exports = definition(tokenize);
     } else {
-        root.infix2postfix = definition(root.tokenize);
+        root.infix2postfix = definition(root.tokenize_equation);
     }
 })(this, function(tokenize) {
     function precedence(a, b) {

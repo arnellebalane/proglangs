@@ -4,7 +4,7 @@
     } else if (typeof exports === 'object') {
         module.exports = definition();
     } else {
-        root.tokenize = definition();
+        root.tokenize_equation = definition();
     }
 })(this, function() {
     function tokenize(equation, label) {
