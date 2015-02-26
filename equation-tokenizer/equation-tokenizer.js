@@ -22,9 +22,9 @@
                     _type = 'operator';
                 }
 
-                if (type !== _type && !parentheses) {
+                if ((_type !== type || _type === 'operator') && !parentheses) {
                     if (buffer) {
-                        buffer = buffer.match(/\d+/g) ? +buffer : buffer;
+                        buffer = buffer.match(/\d+/) ? +buffer : buffer;
                         tokens.push(label ? { value: buffer, type: type } : buffer);
                         buffer = '';
                     }
@@ -32,6 +32,10 @@
                 }
 
                 buffer += character;
+            } else if (buffer && !parentheses) {
+                buffer = buffer.match(/\d+/) ? + buffer : buffer;
+                tokens.push(label ? { value: buffer, type: type } : buffer);
+                buffer = '';
             }
 
             if (character === '(') {

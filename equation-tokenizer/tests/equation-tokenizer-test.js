@@ -114,4 +114,24 @@ describe('Equation Tokenizer', function() {
         var actual = tokenize(given);
         expect(actual).to.eql(expected);
     });
+
+    it('should be able to tokenize without labels given equations in postfix format', function() {
+        var given = '1 2 3 * +';
+        var expected = [1, 2, 3, '*', '+'];
+        var actual = tokenize(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should be able to tokenize with labels given equations in postfix format', function() {
+        var given = '1 2 3 * +';
+        var expected = [
+            { value: 1, type: 'operand' },
+            { value: 2, type: 'operand' },
+            { value: 3, type: 'operand' },
+            { value: '*', type: 'operator' },
+            { value: '+', type: 'operator' },
+        ];
+        var actual = tokenize(given, true);
+        expect(actual).to.eql(expected);
+    });
 });
