@@ -50,7 +50,7 @@
         if (!keep_tokens) {
             var values = [];
             postfix.forEach(function(token) {
-                values.push(token.value)
+                values.push(token.value);
             });
             return values.join(' ');
         }
