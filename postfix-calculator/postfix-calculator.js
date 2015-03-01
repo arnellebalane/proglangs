@@ -19,8 +19,10 @@
             return a / b;
         } else if (operator === '%') {
             return a % b;
+        } else if (operator === '^') {
+            return Math.pow(a, b);
         }
-        throw new Error('Invalid Operation.');
+        throw new Error('Invalid Operation: ' + operator);
     }
 
 

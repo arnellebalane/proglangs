@@ -43,4 +43,11 @@ describe('Postfix Calculator', function() {
         var actual = calculate(given);
         expect(actual).to.eql(expected);
     });
+
+    it('should evaluate "2 3 ^ 3 %" to "2"', function() {
+        var given = '2 3 ^ 3 %';
+        var expected = 2;
+        var actual = calculate(given);
+        expect(actual).to.eql(expected);
+    });
 });
