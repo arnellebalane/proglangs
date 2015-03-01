@@ -36,4 +36,11 @@ describe('Postfix Calculator', function() {
         }
         expect(test).to.throwException(/Invalid Postfix Statement/);
     });
+
+    it('should evaluate "1 2 3 + / 4 * 5 6 % -" to "-4.2"', function() {
+        var given = '1 2 3 + / 4 * 5 6 % -';
+        var expected = -4.2;
+        var actual = calculate(given);
+        expect(actual).to.eql(expected);
+    });
 });

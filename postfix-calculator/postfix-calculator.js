@@ -17,6 +17,8 @@
             return a * b;
         } else if (operator === '/') {
             return a / b;
+        } else if (operator === '%') {
+            return a % b;
         }
         throw new Error('Invalid Operation.');
     }
