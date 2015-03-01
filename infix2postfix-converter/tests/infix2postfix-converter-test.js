@@ -51,8 +51,57 @@ describe('Infix-to-Postfix Converter', function() {
         expect(actual).to.eql(expected);
     });
 
-    it('should convert "(4+8)*(6-5)/((3-2)*(2+2))" to "4 8 + 6 5 - * 3 2 - 2 2 + * /"', function() {
-        var given = '(4+8)*(6-5)/((3-2)*(2+2))';
+    it('should convert "A * B + C" to "A B * C +"', function() {
+        var given = 'A * B + C';
+        var expected = 'A B * C +';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "A + B * C" to "A B C * +"', function() {
+        var given = 'A + B * C';
+        var expected = 'A B C * +';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "A * ( B + C )" to "A B C + *"', function() {
+        var given = 'A * ( B + C )';
+        var expected = 'A B C + *';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "A - B + C" to "A B - C +"', function() {
+        var given = 'A - B + C';
+        var expected = 'A B - C +';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "A * B ^ C + D" to "A B C ^ * D +"', function() {
+        var given = 'A * B ^ C + D';
+        var expected = 'A B C ^ * D +';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "A * ( B + C * D ) + E" to "A B C D * + * E +"', function() {
+        var given = 'A * ( B + C * D ) + E';
+        var expected = 'A B C D * + * E +';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "(300 + 23) * (43 - 21) / (84 + 7)" to "300 23 + 43 21 - * 84 7 + /"', function() {
+        var given = '(300 + 23) * (43 - 21) / (84 + 7)';
+        var expected = '300 23 + 43 21 - * 84 7 + /';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should convert "(4 + 8) * (6 - 5) / ((3 - 2) * (2 + 2))" to "4 8 + 6 5 - * 3 2 - 2 2 + * /"', function() {
+        var given = '(4 + 8) * (6 - 5) / ((3 - 2) * (2 + 2))';
         var expected = '4 8 + 6 5 - * 3 2 - 2 2 + * /';
         var actual = infix2postfix(given);
         expect(actual).to.eql(expected);
