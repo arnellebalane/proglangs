@@ -50,7 +50,7 @@
         equation.split('').forEach(function(character) {
             if (character.trim().length) {
                 var _type = 'equation';
-                if (is_alphanumeric(character) || is_numeric(character)) {
+                if (is_alphanumeric(character)) {
                     _type = 'operand';
                 } else if (is_operator(character)) {
                     _type = 'operator';
