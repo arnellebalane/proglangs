@@ -44,6 +44,9 @@
                         postfix.push(top);
                         top = stack.pop();
                     }
+                    if (top && top.value === '(') {
+                        stack.push(top);
+                    }
                     if (_token) {
                         stack.push(_token);
                     }

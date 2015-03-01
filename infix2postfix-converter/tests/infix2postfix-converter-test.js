@@ -50,4 +50,11 @@ describe('Infix-to-Postfix Converter', function() {
         var actual = infix2postfix(given);
         expect(actual).to.eql(expected);
     });
+
+    it('should convert "(4+8)*(6-5)/((3-2)*(2+2))" to "4 8 + 6 5 - * 3 2 - 2 2 + * /"', function() {
+        var given = '(4+8)*(6-5)/((3-2)*(2+2))';
+        var expected = '4 8 + 6 5 - * 3 2 - 2 2 + * /';
+        var actual = infix2postfix(given);
+        expect(actual).to.eql(expected);
+    });
 });
