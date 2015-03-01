@@ -13,7 +13,7 @@
 
 
     function is_alphanumeric(token) {
-        return token.match(/^[A-Za-z0-9_]$/);
+        return token.match(/^[A-Za-z0-9_\.]$/);
     }
 
 
@@ -50,7 +50,7 @@
         equation.split('').forEach(function(character) {
             if (character.trim().length) {
                 var _type = 'equation';
-                if (is_alphanumeric(character)) {
+                if (is_alphanumeric(character) || is_numeric(character)) {
                     _type = 'operand';
                 } else if (is_operator(character)) {
                     _type = 'operator';

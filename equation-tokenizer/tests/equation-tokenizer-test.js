@@ -45,6 +45,24 @@ describe('Equation Tokenizer', function() {
         expect(actual).to.eql(expected);
     });
 
+    it('should be able to tokenize without labels given equations with decimal values', function() {
+        var given = '12 + 23.34';
+        var expected = [12, '+', 23.34];
+        var actual = tokenize(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should be able to tokenize with labels given equations with decimal values', function() {
+        var given = '12 + 23.34';
+        var expected = [
+            { value: 12, type: 'operand' },
+            { value: '+', type: 'operator' },
+            { value: 23.34, type: 'operand' }
+        ];
+        var actual = tokenize(given, true);
+        expect(actual).to.eql(expected);
+    });
+
     it('should be able to tokenize without labels given equations containing variable names', function() {
         var given = 'a + b2 * _c4';
         var expected = ['a', '+', 'b2', '*', '_c4'];
