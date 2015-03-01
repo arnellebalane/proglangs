@@ -1,0 +1,12 @@
+{
+    "name": "Postfix Calculator",
+    "version": "1.0.0",
+    "main": "index.html",
+    "window": {
+        "toolbar": false,
+        "width": 450,
+        "height": 300,
+        "resizable": false
+    }
+}
+
