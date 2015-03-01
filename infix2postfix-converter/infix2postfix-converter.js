@@ -31,15 +31,30 @@
                     stack.push(token);
                 } else {
                     var top = stack.pop();
-                    if (precedence(token.value, top.value) < 0) {
-                        stack.push(top, token);
-                    } else {
-                        stack.push(token);
+                    var _token = token;
+                    while (top && top.value !== '(') {
+                        if (precedence(token.value, top.value) < 0) {
+                            stack.push(top, token);
+                            _token = null;
+                            break;
+                        }
                         postfix.push(top);
+                        top = stack.pop();
+                    }
+                    if (_token) {
+                        stack.push(_token);
                     }
                 }
-            } else if (token.type === 'equation') {
-                postfix = postfix.concat(convert(token.value, true));
+            } else if (token.type === 'group') {
+                if (token.value === '(') {
+                    stack.push(token);
+                } else if (token.value === ')') {
+                    var top = stack.pop();
+                    while (top && top.value !== '(') {
+                        postfix.push(top);
+                        top = stack.pop();
+                    }
+                }
             }
         });
 
