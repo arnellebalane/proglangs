@@ -9,9 +9,9 @@
     }
 })(this, function(tokenize) {
     function precedence(a, b) {
-        if ((a === '*' || a === '/') && (b === '+' || b === '-')) {
+        if ('*/%'.indexOf(a) > -1 && '+-'.indexOf(b) > -1) {
             return -1;
-        } else if ((a === '+' || a === '-') && (b === '*' || b === '/')) {
+        } else if ('+-'.indexOf(a) > -1 && '*/%'.indexOf(b) > -1) {
             return 1;
         }
         return 0;

@@ -37,9 +37,9 @@ describe('Infix-to-Postfix Converter', function() {
         expect(actual).to.eql(expected);
     });
 
-    it('should convert "1 / (2 + 3) * 4 - 5" to "1 2 3 + / 4 * 5 -"', function() {
-        var given = '1 / (2 + 3) * 4 - 5';
-        var expected = '1 2 3 + / 4 * 5 -';
+    it('should convert "1 / (2 + 3) * 4 - 5 % 6" to "1 2 3 + / 4 * 5 6 % -"', function() {
+        var given = '1 / (2 + 3) * 4 - 5 % 6';
+        var expected = '1 2 3 + / 4 * 5 6 % -';
         var actual = infix2postfix(given);
         expect(actual).to.eql(expected);
     });
