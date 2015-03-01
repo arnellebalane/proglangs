@@ -45,9 +45,29 @@ describe('Equation Tokenizer', function() {
         expect(actual).to.eql(expected);
     });
 
+    it('should be able to tokenize without labels given equations containing variable names', function() {
+        var given = 'a + b2 * _c4';
+        var expected = ['a', '+', 'b2', '*', '_c4'];
+        var actual = tokenize(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should be able to tokenize with labels given equations containing variable names', function() {
+        var given = 'a + b2 * _c4';
+        var expected = [
+            { value: 'a', type: 'operand' },
+            { value: '+', type: 'operator' },
+            { value: 'b2', type: 'operand' },
+            { value: '*', type: 'operator' },
+            { value: '_c4', type: 'operand' }
+        ];
+        var actual = tokenize(given, true);
+        expect(actual).to.eql(expected);
+    });
+
     it('should be able to tokenize without labels given equations containing parenthesis groupings', function() {
         var given = '1 * (2 + 3)';
-        var expected = [1, '*', [2, '+', 3]];
+        var expected = [1, '*', '(', 2, '+', 3, ')'];
         var actual = tokenize(given);
         expect(actual).to.eql(expected);
     });
@@ -57,11 +77,11 @@ describe('Equation Tokenizer', function() {
         var expected = [
             { value: 1, type: 'operand' },
             { value: '*', type: 'operator' },
-            { value: [
-                { value: 2, type: 'operand' },
-                { value: '+', type: 'operator' },
-                { value: 3, type: 'operand' }
-            ], type: 'equation' }
+            { value: '(', type: 'group' },
+            { value: 2, type: 'operand' },
+            { value: '+', type: 'operator' },
+            { value: 3, type: 'operand' },
+            { value: ')', type: 'group' },
         ];
         var actual = tokenize(given, true);
         expect(actual).to.eql(expected);
@@ -69,7 +89,7 @@ describe('Equation Tokenizer', function() {
 
     it('should be able to tokenize without labels given equations containing nested parenthesis groupings', function() {
         var given = '1 * (2 + 3 / (4 - 5)) + 6';
-        var expected = [1, '*', [2, '+', 3, '/', [4, '-', 5]], '+', 6];
+        var expected = [1, '*', '(', 2, '+', 3, '/', '(', 4, '-', 5, ')', ')', '+', 6];
         var actual = tokenize(given);
         expect(actual).to.eql(expected);
     });
@@ -79,17 +99,17 @@ describe('Equation Tokenizer', function() {
         var expected = [
             { value: 1, type: 'operand' },
             { value: '*', type: 'operator' },
-            { value: [
-                { value: 2, type: 'operand' },
-                { value: '+', type: 'operator' },
-                { value: 3, type: 'operand' },
-                { value: '/', type: 'operator' },
-                { value: [
-                    { value: 4, type: 'operand' },
-                    { value: '-', type: 'operator' },
-                    { value: 5, type: 'operand' },
-                ], type: 'equation' },
-            ], type: 'equation' },
+            { value: '(', type: 'group' },
+            { value: 2, type: 'operand' },
+            { value: '+', type: 'operator' },
+            { value: 3, type: 'operand' },
+            { value: '/', type: 'operator' },
+            { value: '(', type: 'group' },
+            { value: 4, type: 'operand' },
+            { value: '-', type: 'operator' },
+            { value: 5, type: 'operand' },
+            { value: ')', type: 'group' },
+            { value: ')', type: 'group' },
             { value: '+', type: 'operator' },
             { value: 6, type: 'operand' }
         ];
@@ -110,7 +130,7 @@ describe('Equation Tokenizer', function() {
 
     it('should be able to tokenize equations that do not contain spaces', function() {
         var given = '1*(2+3)';
-        var expected = [1, '*', [2, '+', 3]];
+        var expected = [1, '*', '(', 2, '+', 3, ')'];
         var actual = tokenize(given);
         expect(actual).to.eql(expected);
     });
