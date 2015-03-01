@@ -50,4 +50,25 @@ describe('Postfix Calculator', function() {
         var actual = calculate(given);
         expect(actual).to.eql(expected);
     });
+
+    it('should evaluate "3 2 * 1 +" to "7"', function() {
+        var given = '3 2 * 1 +';
+        var expected = 7;
+        var actual = calculate(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should evaluate "65 3 5 * + 83 -" to "-3"', function() {
+        var given = '65 3 5 * + 83 -';
+        var expected = -3;
+        var actual = calculate(given);
+        expect(actual).to.eql(expected);
+    });
+
+    it('should throw an error for "6 5 3 * + 8 3 - + 3"', function() {
+        function test() {
+            calculate('6 5 3 * + 8 3 - + 3');
+        }
+        expect(test).to.throwException(/Invalid Postfix Statement/);
+    });
 });
