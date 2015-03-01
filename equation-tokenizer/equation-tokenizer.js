@@ -18,7 +18,7 @@
                 var _type = 'equation';
                 if (character.match(/\d/)) {
                     _type = 'operand';
-                } else if (character.match(/[+*\/-]/)) {
+                } else if (character.match(/[+*\/%-]/)) {
                     _type = 'operator';
                 }
 

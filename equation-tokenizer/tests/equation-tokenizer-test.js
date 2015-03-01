@@ -134,4 +134,17 @@ describe('Equation Tokenizer', function() {
         var actual = tokenize(given, true);
         expect(actual).to.eql(expected);
     });
+
+    it('should be able to tokenize and label the modulo operator from a given equation', function() {
+        var given = '1 * 2 % 3';
+        var expected = [
+            { value: 1, type: 'operand' },
+            { value: '*', type: 'operator' },
+            { value: 2, type: 'operand' },
+            { value: '%', type: 'operator' },
+            { value: 3, type: 'operand' }
+        ];
+        var actual = tokenize(given, true);
+        expect(actual).to.eql(expected);
+    });
 });
