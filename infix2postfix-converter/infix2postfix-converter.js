@@ -8,10 +8,13 @@
         root.infix2postfix = definition(root.tokenize_equation);
     }
 })(this, function(tokenize) {
+    var precedences = { '^': 3, '*': 2, '/': 2, '%': 2, '+': 1, '-': 1 };
+
+
     function precedence(a, b) {
-        if ('*/%'.indexOf(a) > -1 && '+-'.indexOf(b) > -1) {
+        if (precedences[a] > precedences[b]) {
             return -1;
-        } else if ('+-'.indexOf(a) > -1 && '*/%'.indexOf(b) > -1) {
+        } else if (precedences[b] > precedences[a]) {
             return 1;
         }
         return 0;
