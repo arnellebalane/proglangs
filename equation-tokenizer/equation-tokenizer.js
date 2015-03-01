@@ -7,6 +7,26 @@
         root.tokenize_equation = definition();
     }
 })(this, function() {
+    function is_identifier(token) {
+        return token.match(/^[A-Za-z_][A-Za-z0-9_]*$/);
+    }
+
+
+    function is_alphanumeric(token) {
+        return token.match(/^[A-Za-z0-9_]$/);
+    }
+
+
+    function is_numeric(token) {
+        return token.match(/^[0-9]*\.?[0-9]+$/);
+    }
+
+
+    function is_operator(token) {
+        return token.match(/^[+\-*\/%\^]$/);
+    }
+
+
     function tokenize(equation, label) {
         var tokens = [];
         var buffer = '';
@@ -14,12 +34,12 @@
         var parentheses = 0;
 
         function append(token) {
-            if (typeof token === 'string' 
-                    &&!token.match(/^[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+|[*+\/%\^-]$/)) {
+            if (typeof token === 'string' && !is_identifier(token)
+                    && !is_numeric(token) && !is_operator(token)) {
                 throw new Error('Invalid Token: ' + token);
             }
             token = typeof token === 'string' 
-                && token.match(/^[0-9]*\.?[0-9]+$/) ? +token : token;
+                && is_numeric(token) ? +token : token;
             if (!label || token instanceof Array) {
                 tokens = tokens.concat(token);
             } else {
@@ -30,9 +50,9 @@
         equation.split('').forEach(function(character) {
             if (character.trim().length) {
                 var _type = 'equation';
-                if (character.match(/[A-Za-z0-9_]/)) {
+                if (is_alphanumeric(character)) {
                     _type = 'operand';
-                } else if (character.match(/[+*\/%\^-]/)) {
+                } else if (is_operator(character)) {
                     _type = 'operator';
                 }
 
