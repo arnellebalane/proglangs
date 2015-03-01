@@ -15,7 +15,7 @@
 
         function append(token) {
             if (typeof token === 'string' 
-                    &&!token.match(/^[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+|[*+\/%-]$/)) {
+                    &&!token.match(/^[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+|[*+\/%\^-]$/)) {
                 throw new Error('Invalid Token: ' + token);
             }
             token = typeof token === 'string' 
@@ -32,7 +32,7 @@
                 var _type = 'equation';
                 if (character.match(/[A-Za-z0-9_]/)) {
                     _type = 'operand';
-                } else if (character.match(/[+*\/%-]/)) {
+                } else if (character.match(/[+*\/%\^-]/)) {
                     _type = 'operator';
                 }
 
