@@ -11,16 +11,13 @@
         return token.match(/^[A-Za-z_][A-Za-z0-9_]*$/);
     }
 
-
     function is_alphanumeric(token) {
         return token.match(/^[A-Za-z0-9_\.]$/);
     }
 
-
     function is_numeric(token) {
         return token.match(/^[0-9]*\.?[0-9]+$/);
     }
-
 
     function is_operator(token) {
         return token.match(/^[+\-*\/%\^]$/);
@@ -38,7 +35,7 @@
                     && !is_numeric(token) && !is_operator(token)) {
                 throw new Error('Invalid Token: ' + token);
             }
-            token = typeof token === 'string' 
+            token = typeof token === 'string'
                 && is_numeric(token) ? +token : token;
             if (!label || token instanceof Array) {
                 tokens = tokens.concat(token);
@@ -99,3 +96,4 @@
 
     return tokenize;
 });
+    
