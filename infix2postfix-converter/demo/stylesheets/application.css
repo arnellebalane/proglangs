@@ -86,7 +86,7 @@ body {
     padding: 15px 25px 25px 25px;
     opacity: 0;
     overflow: auto;
-    transition-property: top, opacity; 
+    transition-property: top, opacity;
     transition-duration: 500ms, 250ms;
     transition-timing-function: ease;
 }

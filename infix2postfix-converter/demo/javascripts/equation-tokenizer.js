@@ -38,7 +38,7 @@
                     && !is_numeric(token) && !is_operator(token)) {
                 throw new Error('Invalid Token: ' + token);
             }
-            token = typeof token === 'string' 
+            token = typeof token === 'string'
                 && is_numeric(token) ? +token : token;
             if (!label || token instanceof Array) {
                 tokens = tokens.concat(token);
