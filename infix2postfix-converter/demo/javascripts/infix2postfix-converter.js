@@ -1,12 +1,9 @@
 (function(root, definition) {
     if (typeof define === 'function' && define.amd) {
-        define([
-            'equation-tokenizer/equation-tokenizer', 
-            'equation-recognizer/equation-recognizer'
-        ], definition);
+        define(['equation-tokenizer', 'equation-recognizer'], definition);
     } else if (typeof exports === 'object') {
-        var tokenize = require('../equation-tokenizer/equation-tokenizer');
-        var recognize = require('../equation-recognizer/equation-recognizer');
+        var tokenize = require('./equation-tokenizer');
+        var recognize = require('./equation-recognizer');
         module.exports = definition(tokenize, recognize);
     } else {
         root.infix2postfix = definition(
