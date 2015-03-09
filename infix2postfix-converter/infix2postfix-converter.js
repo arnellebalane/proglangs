@@ -1,13 +1,20 @@
 (function(root, definition) {
     if (typeof define === 'function' && define.amd) {
-        define(['equation-tokenizer/equation-tokenizer'], definition);
+        define([
+            'equation-tokenizer/equation-tokenizer', 
+            'equation-recognizer/equation-recognizer'
+        ], definition);
     } else if (typeof exports === 'object') {
         var tokenize = require('../equation-tokenizer/equation-tokenizer');
-        module.exports = definition(tokenize);
+        var recognize = require('../equation-recognizer/equation-recognizer');
+        module.exports = definition(tokenize, recognize);
     } else {
-        root.infix2postfix = definition(root.tokenize_equation);
+        root.infix2postfix = definition(
+            root.tokenize_equation, 
+            root.recognize_equation
+        );
     }
-})(this, function(tokenize) {
+})(this, function(tokenize, recognize) {
     var precedences = { '^': 3, '*': 2, '/': 2, '%': 2, '+': 1, '-': 1 };
 
 
@@ -25,6 +32,8 @@
         var tokens = equation instanceof Array ? equation : tokenize(equation, true);
         var stack = [];
         var postfix = [];
+
+        recognize(tokens);
 
         tokens.forEach(function(token) {
             if (token.type === 'operand') {
