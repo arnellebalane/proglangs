@@ -38,9 +38,9 @@
 
     EquationRecognizer.prototype._p = function() {
         var next = this._next();
-        if (next.type === 'operand') {
+        if (next && next.type === 'operand') {
             this._consume();
-        } else if (next.type === 'group' && next.value === '(') {
+        } else if (next && next.type === 'group' && next.value === '(') {
             this._consume();
             this._e();
             this._expect(')');
