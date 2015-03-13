@@ -95,6 +95,25 @@
                     });
                     flags.STRING = true;
                 }
+            } else if (current === '\'') {
+                if (flags.STRING) {
+                    this.tokens.push({
+                        label: 'STRING',
+                        value: buffer
+                    });
+                    buffer = '';
+                    this.tokens.push({
+                        label: 'SINGLE_QUOTE',
+                        value: current
+                    });
+                    flags.STRING = false;
+                } else {
+                    this.tokens.push({
+                        label: 'SINGLE_QUOTE',
+                        value: current
+                    });
+                    flags.STRING = true;
+                }
             } else if (this.whitespace(current)) {
                 if (flags.STRING) {
                     buffer += current;
