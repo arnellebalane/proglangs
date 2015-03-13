@@ -35,7 +35,7 @@
                     var result = this._datatype(this.index);
                     if (result.matched) {
                         this.tokens.push({
-                            label: 'DATATYPE',
+                            label: result.label,
                             value: result.token
                         });
                         this.index = result.end;
@@ -44,7 +44,7 @@
                     result = this._identifier(this.index);
                     if (result.matched) {
                         this.tokens.push({
-                            label: 'IDENTIFIER',
+                            label: result.label,
                             value: result.token
                         });
                         this.index = result.end;
@@ -57,7 +57,7 @@
                     var result = this._number(this.index);
                     if (result.matched) {
                         this.tokens.push({
-                            label: 'NUMBER',
+                            label: result.label,
                             value: result.token
                         });
                         this.index = result.end;
@@ -67,24 +67,13 @@
                 if (flags.STRING) {
                     buffer += current;
                 } else {
-                    if (current === '+' && next === '+'
-                            || current === '-' && next === '-') {
+                    var result = this._operation(this.index);
+                    if (result.matched) {
                         this.tokens.push({
-                            label: current === '+' ? 'INCREMENT' : 'DECREMENT',
-                            value: current + next
+                            label: result.label,
+                            value: result.token
                         });
-                        this.index++;
-                    } else if (next === '=') {
-                        this.tokens.push({
-                            label: 'OPERATION_ASSIGNMENT',
-                            value: current + next
-                        });
-                        this.index++;
-                    } else {
-                        this.tokens.push({
-                            label: 'OPERATION',
-                            value: current
-                        });
+                        this.index = result.end;
                     }
                 }
             } else if (current === '"') {
@@ -151,7 +140,7 @@
         }
         var token = this.code.slice(start, end).join('');
         if (token.match(pattern)) {
-            return { matched: true, token: token, end: end };
+            return { matched: true, label: 'DATATYPE', token: token, end: end };
         }
         return { matched: false };
     };
@@ -162,7 +151,7 @@
             end++;
         }
         var token = this.code.slice(start, end).join('');
-        return { matched: true, token: token, end: end };
+        return { matched: true, label: 'IDENTIFIER', token: token, end: end };
     };
 
     TokenizedCode.prototype._number = function(start) {
@@ -174,7 +163,34 @@
             }
         }
         var token = this.code.slice(start, end - 1).join('');
-        return { matched: true, token: token, end: end - 1 };
+        return { matched: true, label: 'NUMBER', token: token, end: end - 1 };
+    };
+
+    TokenizedCode.prototype._operation = function(start) {
+        var current = this.code[start];
+        var next = this.code[start + 1];
+        if (current === '+' && next === '+'
+                || current === '-' && next === '-') {
+            return {
+                matched: true,
+                label: current === '+' ? 'INCREMENT' : 'DECREMENT',
+                token: current + next,
+                end: start + 1
+            };
+        } else if (next === '=') {
+            return {
+                matched: true,
+                label: 'OPERATION_ASSIGNMENT',
+                token: current + next,
+                end: start + 1
+            };
+        }
+        return {
+            matched: true,
+            label: 'OPERATION',
+            token: current,
+            end: start
+        };
     };
 
 
