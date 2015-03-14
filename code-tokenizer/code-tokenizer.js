@@ -197,9 +197,9 @@
 
     TokenizedCode.prototype.keyword = function(token) {
         var keywords = ['break', 'case', 'const', 'continue', 'default', 'do',
-            'else', 'entry', 'extern', 'for', 'goto', 'register', 'return',
-            'sizeof', 'static', 'struct', 'switch', 'typedef', 'union',
-            'while'];
+            'else', 'entry', 'extern', 'for', 'goto', 'if', 'register',
+            'return', 'sizeof', 'static', 'struct', 'switch', 'typedef',
+            'union', 'while'];
         for (var i = 0; i < keywords.length; i++) {
             if (keywords[i] === token) {
                 return true;
