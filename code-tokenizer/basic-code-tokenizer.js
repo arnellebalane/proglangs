@@ -73,7 +73,39 @@
             }
         }
         return results;
-    };
+    }
+
+
+    function operators(tokens) {
+        var results = [];
+        var labels = ['OPERATION', 'COMPARISON', 'INCREMENT', 'DECREMENT',
+            'LOGICAL_OPERATION', 'OPERATION_ASSIGNMENT', 'ASSIGNMENT',
+            'NOT_OPERATION', 'DOT_OPERATION', 'TERNARY_OPERATION',
+            'TERNARY_SELECTION'];
+        for (var i = 0; i < tokens.length; i++) {
+            if (labels.indexOf(tokens[i].label) > -1
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
+            }
+        }
+        return results;
+    }
+
+
+    function punctuators(tokens) {
+        var results = [];
+        var labels = ['OPENING_PARENTHESIS', 'CLOSING_PARENTHESIS',
+            'OPENING_ANGLE_BRACKET', 'CLOSING_ANGLE_BRACKET',
+            'OPENING_BRACKET', 'CLOSING_BRACKET', 'OPENING_BRACES',
+            'CLOSING_BRACES', 'DELIMITER', 'SINGLE_QUOTE', 'DOUBLE_QUOTE'];
+        for (var i = 0; i < tokens.length; i++) {
+            if (labels.indexOf(tokens[i].label) > -1
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
+            }
+        }
+        return results;
+    }
 
 
     function tokenize(code) {
@@ -82,7 +114,9 @@
             macros: macros(tokens),
             functions: functions(tokens),
             function_calls: function_calls(tokens),
-            keywords: keywords(tokens)
+            keywords: keywords(tokens),
+            operators: operators(tokens),
+            punctuators: punctuators(tokens)
         };
     }
 
