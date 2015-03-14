@@ -154,6 +154,25 @@
     }
 
 
+    function variables(tokens) {
+        var results = [];
+        var defined = functions(tokens);
+        var calls = function_calls(tokens);
+        var reserved = keywords(tokens);
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i].label === 'IDENTIFIER'
+                    && defined.indexOf(tokens[i].token) === -1
+                    && calls.indexOf(tokens[i].token) === -1
+                    && reserved.indexOf(tokens[i].token) === -1
+                    && tokens[i - 1].label.match(/^(WHITESPACE|DELIMITER)$/)
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
+            }
+        }
+        return results;
+    }
+
+
     function tokenize(code) {
         var tokens = _tokenize(code);
         return {
@@ -163,7 +182,8 @@
             keywords: keywords(tokens),
             operators: operators(tokens),
             punctuators: punctuators(tokens),
-            parameters: parameters(tokens)
+            parameters: parameters(tokens),
+            variables: variables(tokens)
         };
     }
 
