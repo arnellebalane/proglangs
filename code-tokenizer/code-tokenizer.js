@@ -60,6 +60,8 @@
                 while (this.datatype(tokens.slice(i, ++end).join(' ')));
                 this._label(tokens.slice(i, end - 1).join(' '), 'DATATYPE');
                 i = end - 2;
+            } else if (this.keyword(current)) {
+                this._label(current, 'KEYWORD');
             } else if (tokens[i -1].match(/^['"']$/)
                     && tokens[i - 1] === tokens[i + 1]) {
                 this._label(current, 'STRING');
@@ -195,12 +197,25 @@
         return false;
     };
 
+    TokenizedCode.prototype.keyword = function(token) {
+        var keywords = ['break', 'case', 'const', 'continue', 'default', 'do',
+            'else', 'entry', 'extern', 'for', 'goto', 'register', 'return',
+            'sizeof', 'static', 'struct', 'switch', 'typedef', 'union',
+            'while'];
+        for (var i = 0; i < keywords.length; i++) {
+            if (keywords[i] === token) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     TokenizedCode.prototype.identifier = function(token) {
-        return token.match(/^[A-Za-z_][A-Za-z0-9_]*$/);
+        return !!token.match(/^[A-Za-z_][A-Za-z0-9_]*$/);
     };
 
     TokenizedCode.prototype.operation = function(token) {
-        return token.match(/^[%/*\+-]$/);
+        return !!token.match(/^[%/*\+-]$/);
     };
 
     TokenizedCode.prototype._label = function(token, label) {
