@@ -30,7 +30,7 @@
 
     function functions(tokens) {
         var results = [];
-        for (var i = 2; i < tokens.length; i++) {
+        for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
                     && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
                     || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
@@ -48,7 +48,7 @@
 
     function function_calls(tokens) {
         var results = [];
-        for (var i = 2; i < tokens.length; i++) {
+        for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
                     && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
                     || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
@@ -64,12 +64,25 @@
     }
 
 
+    function keywords(tokens) {
+        var results = [];
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i].label.match(/^(KEYWORD|DATATYPE)$/)
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
+            }
+        }
+        return results;
+    };
+
+
     function tokenize(code) {
         var tokens = _tokenize(code);
         return {
             macros: macros(tokens),
             functions: functions(tokens),
-            function_calls: function_calls(tokens)
+            function_calls: function_calls(tokens),
+            keywords: keywords(tokens)
         };
     }
 
