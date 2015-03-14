@@ -27,6 +27,7 @@
                 index = i - 1;
             } else if (this.digit(current)) {
                 var i = index + 1;
+                index -= code[index - 1].match(/^[\+-]$/) ? 1 : 0;
                 while (this.number(code.slice(index, i).join(''))
                         || flags.STRING) {
                     i++;
@@ -164,7 +165,7 @@
     };
 
     TokenizedCode.prototype.number = function(token) {
-        return token && token.match(/^(-|\+)?[0-9]*(\.[0-9]+)?$/);
+        return token && token.match(/^([0-9]*|(-|\+)[0-9]+)(\.[0-9]+)?$/);
     };
 
     TokenizedCode.prototype.alphanumeric = function(token) {
