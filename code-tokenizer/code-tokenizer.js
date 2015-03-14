@@ -11,25 +11,20 @@
         code = code.split('');
         var tokens = [];
         var index = 0;
-        var flags = { STRING: false };
 
         while (index < code.length) {
             var current = code[index];
             if (this.letter(current)) {
                 var i = index;
-                while (this.alphanumeric(code[i]) || flags.STRING) {
+                while (this.alphanumeric(code[i])) {
                     i++;
-                    if (flags.STRING && flags.STRING === code[i]) {
-                        break;
-                    }
                 }
                 tokens.push(code.slice(index, i).join(''));
                 index = i - 1;
             } else if (this.digit(current)) {
                 var i = index + 1;
                 index -= code[index - 1].match(/^[\+-]$/) ? 1 : 0;
-                while (this.number(code.slice(index, i).join(''))
-                        || flags.STRING) {
+                while (this.number(code.slice(index, i).join(''))) {
                     i++;
                     if (code[i] === '.') {
                         i += 2;
@@ -38,13 +33,16 @@
                 tokens.push(code.slice(index, i - 1).join(''));
                 index = i - 2;
             } else if (current.match(/^['"]$/)) {
-                if (flags.STRING === current) {
-                    flags.STRING = false;
-                } else {
-                    flags.STRING = current;
-                }
+                var end = index + 1;
+                while (code[++end] !== current);
+                tokens.push(current, code.slice(index + 1, end).join(''));
                 tokens.push(current);
-            } else if (!this.whitespace(current)) {
+                index = end;
+            } else if (this.whitespace(current)) {
+                if (tokens[tokens.length - 1] !== current) {
+                    tokens.push(current);
+                }
+            } else {
                 tokens.push(current);
             }
             index++;
@@ -62,7 +60,7 @@
                 i = end - 2;
             } else if (this.keyword(current)) {
                 this._label(current, 'KEYWORD');
-            } else if (tokens[i -1].match(/^['"']$/)
+            } else if (tokens[i - 1].match(/^['"']$/)
                     && tokens[i - 1] === tokens[i + 1]) {
                 this._label(current, 'STRING');
             } else if (this.identifier(current)) {
@@ -83,6 +81,8 @@
                 } else {
                     this._label(current, 'OPERATION');
                 }
+            } else if (this.whitespace(current)) {
+                this._label(current, 'WHITESPACE');
             } else if (current.match(/^[|&]$/)) {
                 var next = tokens[i + 1];
                 if (current === next) {
@@ -100,10 +100,10 @@
                     this._label(current, 'NOT_OPERATION');
                 } else if (current === '<' || current === '>') {
                     var end = i;
-                    while (!tokens[++end].match(/^[;)?]$/));
-                    if (tokens[end] === ';' && current === '<') {
+                    while (!tokens[++end].match(/^[\n)?]$/));
+                    if (tokens[end] === '\n' && current === '<') {
                         this._label(current, 'OPENING_ANGLE_BRACKET');
-                    } else if (tokens[end] === ';' && current === '>') {
+                    } else if (tokens[end] === '\n' && current === '>') {
                         this._label(current, 'CLOSING_ANGLE_BRACKET');
                     } else {
                         this._label(current, 'COMPARISON');
