@@ -154,8 +154,6 @@
                 this._label(current, 'UNCLASSIFIED');
             }
         }
-
-        console.log(this.tokens);
     }
 
     TokenizedCode.prototype.letter = function(token) {
