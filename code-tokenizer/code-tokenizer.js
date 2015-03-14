@@ -223,6 +223,7 @@
 
     function tokenize(code) {
         var result = new TokenizedCode(code);
+        return result.tokens;
     }
 
 
