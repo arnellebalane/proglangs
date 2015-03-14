@@ -31,11 +31,33 @@
     function functions(tokens) {
         var results = [];
         for (var i = 2; i < tokens.length; i++) {
-            if (tokens[i].label === 'IDENTIFIER' &&
-                    tokens[i - 2].label === 'DATATYPE'
+            if (tokens[i].label === 'IDENTIFIER'
                     && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
                     || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
-                results.push(tokens[i].token);
+                var end = i;
+                while (!tokens[++end].token.match(/^[;{]$/));
+                if (tokens[end].token === '{'
+                        && results.indexOf(tokens[i].token) === -1) {
+                    results.push(tokens[i].token);
+                }
+            }
+        }
+        return results;
+    }
+
+
+    function function_calls(tokens) {
+        var results = [];
+        for (var i = 2; i < tokens.length; i++) {
+            if (tokens[i].label === 'IDENTIFIER'
+                    && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
+                    || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
+                var end = i;
+                while (!tokens[++end].token.match(/^[;{]$/));
+                if (tokens[end].token === ';'
+                        && results.indexOf(tokens[i].token) === -1) {
+                    results.push(tokens[i].token);
+                }
             }
         }
         return results;
@@ -46,7 +68,8 @@
         var tokens = _tokenize(code);
         return {
             macros: macros(tokens),
-            functions: functions(tokens)
+            functions: functions(tokens),
+            function_calls: function_calls(tokens)
         };
     }
 
