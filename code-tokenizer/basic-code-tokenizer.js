@@ -108,6 +108,52 @@
     }
 
 
+    function parameters(tokens) {
+        var results = [];
+        var calls = function_calls(tokens);
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i].label === 'OPENING_PARENTHESIS'
+                    && (tokens[i - 1].label === 'IDENTIFIER'
+                    || tokens[i - 2].label === 'IDENTIFIER')) {
+                var function_name = tokens[i - 1].label === 'IDENTIFIER'
+                    ? tokens[i - 1].token : tokens[i - 2].token;
+                if (calls.indexOf(function_name) > -1) {
+                    var count = 1;
+                    var start = i + 1;
+                    for (var j = i + 1; count; j++) {
+                        if (tokens[j].label === 'OPENING_PARENTHESIS') {
+                            count++;
+                        } else if (tokens[j].label === 'CLOSING_PARENTHESIS') {
+                            count--;
+                            if (!count) {
+                                var value = '';
+                                while (start < j) {
+                                    value += tokens[start++].token;
+                                }
+                                if (value.length) {
+                                    results.push(value);
+                                }
+                            }
+                        } else if (tokens[j].label === 'DELIMITER') {
+                            if (count === 1) {
+                                var value = '';
+                                while (start < j) {
+                                    value += tokens[start++].token;
+                                }
+                                if (value.length) {
+                                    results.push(value);
+                                }
+                                start++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+
     function tokenize(code) {
         var tokens = _tokenize(code);
         return {
@@ -116,7 +162,8 @@
             function_calls: function_calls(tokens),
             keywords: keywords(tokens),
             operators: operators(tokens),
-            punctuators: punctuators(tokens)
+            punctuators: punctuators(tokens),
+            parameters: parameters(tokens)
         };
     }
 
