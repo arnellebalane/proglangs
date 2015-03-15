@@ -104,7 +104,7 @@
     }
 
 
-    function _parameters(tokens) {
+    function _arguments(tokens) {
         var results = [];
         var calls = _function_calls(tokens);
         for (var i = 0; i < tokens.length; i++) {
@@ -150,7 +150,7 @@
     }
 
 
-    function _arguments(tokens) {
+    function _parameters(tokens) {
         var results = [];
         var funcs = _functions(tokens);
         for (var i = 0; i < tokens.length; i++) {
@@ -212,6 +212,12 @@
                 results.push(value);
             }
         }
+        return results;
+    }
+
+
+    function _delimiters(tokens) {
+        var results = [];
         return results;
     }
 
