@@ -183,8 +183,10 @@
         var defined = _functions(tokens);
         var calls = _function_calls(tokens);
         var reserved = _keywords(tokens);
+        var comments = _comments(tokens, true);
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
+                    && comments.indexOf(i) === -1
                     && defined.indexOf(tokens[i].token) === -1
                     && calls.indexOf(tokens[i].token) === -1
                     && reserved.indexOf(tokens[i].token) === -1
@@ -216,8 +218,9 @@
     }
 
 
-    function _comments(tokens) {
+    function _comments(tokens, index) {
         var results = [];
+        var indeces = [];
         for (var i = 0, q = 1; i < tokens.length; i++) {
             if (tokens[i].label === 'DOUBLE_QUOTE'
                     && tokens[i - 1].token !== '\\') {
@@ -230,6 +233,7 @@
                 var value = '';
                 while (tokens[++end].token !== '\n');
                 while (start < end) {
+                    indeces.push(start);
                     value += tokens[start++].token;
                 }
                 results.push(value);
@@ -246,13 +250,14 @@
                     end++;
                 }
                 while (start <= end) {
+                    indeces.push(start);
                     value += tokens[start++].token;
                 }
                 results.push(value);
                 i = end;
             }
         }
-        return results;
+        return index ? indeces : results;
     };
 
 
