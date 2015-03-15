@@ -216,10 +216,44 @@
     }
 
 
-    function _delimiters(tokens) {
+    function _comments(tokens) {
         var results = [];
+        for (var i = 0, q = 1; i < tokens.length; i++) {
+            if (tokens[i].label === 'DOUBLE_QUOTE'
+                    && tokens[i - 1].token !== '\\') {
+                q *= -1;
+            } else if (tokens[i].token === '/'
+                    && tokens[i + 1].token === '/'
+                    && q === 1) {
+                var start = i;
+                var end = i;
+                var value = '';
+                while (tokens[++end].token !== '\n');
+                while (start < end) {
+                    value += tokens[start++].token;
+                }
+                results.push(value);
+                i = end - 1;
+            } else if (tokens[i].token === '/'
+                    && tokens[i + 1].token === '*'
+                    && q === 1) {
+                var start = i;
+                var end = i + 1;
+                var value = '';
+                while (!(tokens[end].token === '/'
+                        && tokens[end - 1].token === '*')
+                        && q === 1) {
+                    end++;
+                }
+                while (start <= end) {
+                    value += tokens[start++].token;
+                }
+                results.push(value);
+                i = end;
+            }
+        }
         return results;
-    }
+    };
 
 
     function tokenize(code) {
@@ -234,7 +268,8 @@
             parameters: _parameters(tokens),
             arguments: _arguments(tokens),
             variables: _variables(tokens),
-            assignments: _assignments(tokens)
+            assignments: _assignments(tokens),
+            comments: _comments(tokens)
         };
     }
 
