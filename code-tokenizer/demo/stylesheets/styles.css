@@ -1,0 +1,93 @@
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+::-webkit-scrollbar {
+    width: 0.3rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.5);
+}
+
+
+html {
+    font-size: 62.5%;
+    height: 100%;
+}
+
+
+body {
+    height: 100%;
+    background-color: #151718;
+}
+
+
+#editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+
+#tabs {
+    position: relative;
+    height: 3rem;
+    background-color: #262b30;
+    box-shadow: inset 0 -3px 0 0 #101112;
+}
+
+
+#tabs > span {
+    display: inline-block;
+    height: 3rem;
+    font: normal 1.4rem/1.7rem "Ubuntu Mono", monospace;
+    color: #eee;
+    padding: 0.5rem 1rem;
+    background-color: #101112;
+    border-bottom: 3px solid #4f99d3;
+}
+
+
+#actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+
+#actions span {
+    float: left;
+    width: 3rem;
+    height: 3rem;
+    background-color: #4f99d3;
+    background: #4f99d3 center center no-repeat;
+    background-size: 75%;
+    cursor: pointer;
+}
+
+#actions span[data-action="tokenize"] {
+    background-image: url("../images/check.svg");
+}
+
+
+textarea {
+    display: block;
+    width: 100%;
+    height: calc(100% - 30px);
+    font: normal 1.6rem/1 "Ubuntu Mono", monospace;
+    color: #eee;
+    padding: 2rem;
+    outline: none;
+    resize: none;
+    border: none;
+    background: none;
+}

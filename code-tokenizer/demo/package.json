@@ -1,0 +1,11 @@
+{
+    "name": "Code Tokenizer",
+    "version": "1.0.0",
+    "main": "index.html",
+    "window": {
+        "toolbar": true,
+        "width": 800,
+        "height": 500,
+        "resizable": false
+    }
+}
