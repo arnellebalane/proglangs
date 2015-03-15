@@ -173,6 +173,25 @@
     }
 
 
+    function assignments(tokens) {
+        var results = [];
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i].label === 'ASSIGNMENT_OPERATION') {
+                var start = i;
+                var end = i;
+                var value = '';
+                while (tokens[--start].label !== 'IDENTIFIER');
+                while (tokens[++end].label !== 'DELIMITER');
+                while (start < end) {
+                    value += tokens[start++].token;
+                }
+                results.push(value);
+            }
+        }
+        return results;
+    }
+
+
     function tokenize(code) {
         var tokens = _tokenize(code);
         return {
@@ -183,7 +202,8 @@
             operators: operators(tokens),
             punctuators: punctuators(tokens),
             parameters: parameters(tokens),
-            variables: variables(tokens)
+            variables: variables(tokens),
+            assignments: assignments(tokens)
         };
     }
 
