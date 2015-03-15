@@ -25,6 +25,7 @@ html {
 body {
     height: 100%;
     background-color: #151718;
+    overflow: hidden;
 }
 
 
@@ -34,6 +35,11 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+    transition: right 300ms ease;
+}
+
+#editor.half {
+    right: 50%;
 }
 
 
@@ -90,4 +96,47 @@ textarea {
     resize: none;
     border: none;
     background: none;
+}
+
+
+#tokens {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    bottom: 0;
+    width: 50%;
+    background-color: #0e1112;
+    overflow: auto;
+    transition: left 300ms ease;
+}
+
+#tokens.shown {
+    left: 50%;
+}
+
+
+#tokens section {
+    position: relative;
+    padding: 3.1rem 1rem 1rem 1rem;
+}
+
+
+#tokens h1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.1rem;
+    font: normal 1.1rem/2.1rem "Ubuntu Mono", monospace;
+    text-transform: uppercase;
+    color: #eee;
+    background-color: #1e2326;
+    padding: 0 10px;
+}
+
+
+#tokens p {
+    font: normal 1.2rem/1 "Ubuntu Mono", monospace;
+    color: #9fca56;
+    margin-bottom: 5px;
 }
