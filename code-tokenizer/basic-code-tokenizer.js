@@ -8,7 +8,7 @@
         root.tokenize_code_basic = definition(root.tokenize_code);
     }
 })(this, function(_tokenize) {
-    function macros(tokens) {
+    function _macros(tokens) {
         var results = [];
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'PREPROCESSOR_DIRECTIVE') {
@@ -28,43 +28,39 @@
     }
 
 
-    function functions(tokens) {
+    function _functions(tokens) {
         var results = [];
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
+                    && tokens[i - 1].label === 'WHITESPACE'
+                    && tokens[i - 2].label === 'DATATYPE'
                     && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
-                    || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
-                var end = i;
-                while (!tokens[++end].token.match(/^[;{]$/));
-                if (tokens[end].token === '{'
-                        && results.indexOf(tokens[i].token) === -1) {
-                    results.push(tokens[i].token);
-                }
+                    || tokens[i + 2].label === 'OPENING_PARENTHESIS')
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
             }
         }
         return results;
     }
 
 
-    function function_calls(tokens) {
+    function _function_calls(tokens) {
         var results = [];
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
+                    && tokens[i - 2]
+                    && tokens[i - 2].label !== 'DATATYPE'
                     && (tokens[i + 1].label === 'OPENING_PARENTHESIS'
-                    || tokens[i + 2].label === 'OPENING_PARENTHESIS')) {
-                var end = i;
-                while (!tokens[++end].token.match(/^[;{]$/));
-                if (tokens[end].token === ';'
-                        && results.indexOf(tokens[i].token) === -1) {
-                    results.push(tokens[i].token);
-                }
+                    || tokens[i + 2].label === 'OPENING_PARENTHESIS')
+                    && results.indexOf(tokens[i].token) === -1) {
+                results.push(tokens[i].token);
             }
         }
         return results;
     }
 
 
-    function keywords(tokens) {
+    function _keywords(tokens) {
         var results = [];
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label.match(/^(KEYWORD|DATATYPE)$/)
@@ -76,7 +72,7 @@
     }
 
 
-    function operators(tokens) {
+    function _operators(tokens) {
         var results = [];
         var labels = ['OPERATION', 'COMPARISON', 'INCREMENT', 'DECREMENT',
             'LOGICAL_OPERATION', 'OPERATION_ASSIGNMENT', 'ASSIGNMENT',
@@ -92,7 +88,7 @@
     }
 
 
-    function punctuators(tokens) {
+    function _punctuators(tokens) {
         var results = [];
         var labels = ['OPENING_PARENTHESIS', 'CLOSING_PARENTHESIS',
             'OPENING_ANGLE_BRACKET', 'CLOSING_ANGLE_BRACKET',
@@ -108,9 +104,9 @@
     }
 
 
-    function parameters(tokens) {
+    function _parameters(tokens) {
         var results = [];
-        var calls = function_calls(tokens);
+        var calls = _function_calls(tokens);
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'OPENING_PARENTHESIS'
                     && (tokens[i - 1].label === 'IDENTIFIER'
@@ -154,11 +150,39 @@
     }
 
 
-    function variables(tokens) {
+    function _arguments(tokens) {
         var results = [];
-        var defined = functions(tokens);
-        var calls = function_calls(tokens);
-        var reserved = keywords(tokens);
+        var funcs = _functions(tokens);
+        for (var i = 0; i < tokens.length; i++) {
+            if (tokens[i].label === 'IDENTIFIER'
+                    && funcs.indexOf(tokens[i].token) > -1) {
+                var start = i;
+                var end = i;
+                var value = '';
+                while (tokens[++start].label !== 'OPENING_PARENTHESIS');
+                while (tokens[++end].label !== 'CLOSING_PARENTHESIS');
+                while (++start < end) {
+                    if (tokens[start].label === 'DELIMITER') {
+                        results.push(value.trim());
+                        value = '';
+                    } else {
+                        value += tokens[start].token;
+                    }
+                }
+                if (value.trim()) {
+                    results.push(value.trim());
+                }
+            }
+        }
+        return results;
+    };
+
+
+    function _variables(tokens) {
+        var results = [];
+        var defined = _functions(tokens);
+        var calls = _function_calls(tokens);
+        var reserved = _keywords(tokens);
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'IDENTIFIER'
                     && defined.indexOf(tokens[i].token) === -1
@@ -173,7 +197,7 @@
     }
 
 
-    function assignments(tokens) {
+    function _assignments(tokens) {
         var results = [];
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'ASSIGNMENT_OPERATION') {
@@ -195,15 +219,16 @@
     function tokenize(code) {
         var tokens = _tokenize(code);
         return {
-            macros: macros(tokens),
-            functions: functions(tokens),
-            function_calls: function_calls(tokens),
-            keywords: keywords(tokens),
-            operators: operators(tokens),
-            punctuators: punctuators(tokens),
-            parameters: parameters(tokens),
-            variables: variables(tokens),
-            assignments: assignments(tokens)
+            macros: _macros(tokens),
+            functions: _functions(tokens),
+            function_calls: _function_calls(tokens),
+            keywords: _keywords(tokens),
+            operators: _operators(tokens),
+            punctuators: _punctuators(tokens),
+            parameters: _parameters(tokens),
+            arguments: _arguments(tokens),
+            variables: _variables(tokens),
+            assignments: _assignments(tokens)
         };
     }
 
