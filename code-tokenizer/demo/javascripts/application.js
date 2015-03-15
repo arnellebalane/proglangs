@@ -6,12 +6,16 @@ $('[data-action="tokenize"]').on('click', function() {
     var code = $('#code').val();
     var tokens = tokenize_code_basic(code);
 
-    $tokens.empty();
+    console.log(tokens);
+
+    $tokens.empty().scrollTop(0);
     for (var key in tokens) {
         var section = $('<section></section>');
-        section.append('<h1>' + key + '</h1>');
+        section.append('<h1>' + key.replace('_', ' ') + '</h1>');
         for (var i = 0; i < tokens[key].length; i++) {
-            section.append('<p>' + tokens[key][i] + '</p>');
+            var token = $('<p></p>');
+            token.text(tokens[key][i]);
+            section.append(token);
         }
         $tokens.append(section);
     }
