@@ -143,3 +143,7 @@ textarea {
     color: #9fca56;
     margin-bottom: 5px;
 }
+
+#tokens p:last-child {
+    margin-bottom: 0;
+}
