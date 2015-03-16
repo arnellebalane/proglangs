@@ -104,16 +104,14 @@
     }
 
 
-    function _arguments(tokens) {
+    function _parameters(tokens) {
         var results = [];
-        var calls = _function_calls(tokens);
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].label === 'OPENING_PARENTHESIS'
                     && (tokens[i - 1].label === 'IDENTIFIER'
                     || tokens[i - 2].label === 'IDENTIFIER')) {
-                var function_name = tokens[i - 1].label === 'IDENTIFIER'
-                    ? tokens[i - 1].token : tokens[i - 2].token;
-                if (calls.indexOf(function_name) > -1) {
+                var x = tokens[i - 1].label === 'WHITESPACE' ? i - 2 : i - 1;
+                if (tokens[x - 2].label === 'DATATYPE') {
                     var count = 1;
                     var start = i + 1;
                     for (var j = i + 1; count; j++) {
@@ -150,27 +148,43 @@
     }
 
 
-    function _parameters(tokens) {
+    function _arguments(tokens) {
         var results = [];
-        var funcs = _functions(tokens);
         for (var i = 0; i < tokens.length; i++) {
-            if (tokens[i].label === 'IDENTIFIER'
-                    && funcs.indexOf(tokens[i].token) > -1) {
-                var start = i;
-                var end = i;
-                var value = '';
-                while (tokens[++start].label !== 'OPENING_PARENTHESIS');
-                while (tokens[++end].label !== 'CLOSING_PARENTHESIS');
-                while (++start < end) {
-                    if (tokens[start].label === 'DELIMITER') {
-                        results.push(value.trim());
-                        value = '';
-                    } else {
-                        value += tokens[start].token;
+            if (tokens[i].label === 'OPENING_PARENTHESIS'
+                    && (tokens[i - 1].label === 'IDENTIFIER'
+                    || tokens[i - 2].label === 'IDENTIFIER')) {
+                var x = tokens[i - 1].label === 'WHITESPACE' ? i - 2 : i - 1;
+                if (tokens[x - 2].label !== 'DATATYPE') {
+                    var count = 1;
+                    var start = i + 1;
+                    for (var j = i + 1; count; j++) {
+                        if (tokens[j].label === 'OPENING_PARENTHESIS') {
+                            count++;
+                        } else if (tokens[j].label === 'CLOSING_PARENTHESIS') {
+                            count--;
+                            if (!count) {
+                                var value = '';
+                                while (start < j) {
+                                    value += tokens[start++].token;
+                                }
+                                if (value.length) {
+                                    results.push(value);
+                                }
+                            }
+                        } else if (tokens[j].label === 'DELIMITER') {
+                            if (count === 1) {
+                                var value = '';
+                                while (start < j) {
+                                    value += tokens[start++].token;
+                                }
+                                if (value.length) {
+                                    results.push(value);
+                                }
+                                start++;
+                            }
+                        }
                     }
-                }
-                if (value.trim()) {
-                    results.push(value.trim());
                 }
             }
         }
