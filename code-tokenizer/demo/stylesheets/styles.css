@@ -27,6 +27,7 @@ body {
     height: 100%;
     background-color: #151718;
     overflow: hidden;
+    -webkit-user-select: none;
 }
 
 
@@ -97,6 +98,7 @@ textarea {
     resize: none;
     border: none;
     background: none;
+    -webkit-user-select: text;
 }
 
 
