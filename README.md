@@ -8,6 +8,7 @@ Different modules that I will need for our programming languages class.
 - Equation Tokenizer
 - Infix-to-Postfix Converter
 - Postfix Calculator
+- Code Tokenizer
 
 ##### How to run module demos
 
