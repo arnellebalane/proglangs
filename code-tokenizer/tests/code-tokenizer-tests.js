@@ -3,7 +3,7 @@ var tokenize = require('../code-tokenizer');
 
 
 describe('Code Tokenizer', function() {
-    it('should recognize as tokens reserved keywords', function() {
+    it('should recognize reserved keywords as tokens', function() {
         var given = '#include<stdio.h>\nint main(void) {\nif (1 > 0) {\nswitch (1) {\ncase 1: return 12; break;\ndefault: return 12;\n}\n} else {\nreturn 24;\n}\n}';
         var tokens = tokenize(given);
         expect(tokens[15]).to.eql({ label: 'KEYWORD', token: 'if' });
@@ -13,5 +13,12 @@ describe('Code Tokenizer', function() {
         expect(tokens[45]).to.eql({ label: 'KEYWORD', token: 'break' });
         expect(tokens[48]).to.eql({ label: 'KEYWORD', token: 'default' });
         expect(tokens[60]).to.eql({ label: 'KEYWORD', token: 'else' });
+    });
+
+    it('should recognize datatypes as tokens', function() {
+        var given = '#include<stdio.h>\nint main(void) {\nif (1 > 0) {\nswitch (1) {\ncase 1: return 12; break;\ndefault: return 12;\n}\n} else {\nreturn 24;\n}\n}';
+        var tokens = tokenize(given);
+        expect(tokens[6]).to.eql({ label: 'DATATYPE', token: 'int' });
+        expect(tokens[10]).to.eql({ label: 'DATATYPE', token: 'void' });
     });
 });
