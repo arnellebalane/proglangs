@@ -30,4 +30,19 @@ describe('Code Tokenizer', function() {
         expect(tokens[17]).to.eql({ label: 'IDENTIFIER', token: 'a' });
         expect(tokens[24]).to.eql({ label: 'IDENTIFIER', token: 'b' });
     });
+
+    it('should recognize brackets, braces and parentheses', function() {
+        var given = '#include<stdio.h>\nint main(void) {\tint a[3] = {1, 2, 3}; return 0;}'
+        var tokens = tokenize(given);
+        expect(tokens[2]).to.eql({ label: 'OPENING_ANGLE_BRACKET', token: '<' });
+        expect(tokens[4]).to.eql({ label: 'CLOSING_ANGLE_BRACKET', token: '>' });
+        expect(tokens[9]).to.eql({ label: 'OPENING_PARENTHESIS', token: '(' });
+        expect(tokens[11]).to.eql({ label: 'CLOSING_PARENTHESIS', token: ')' });
+        expect(tokens[13]).to.eql({ label: 'OPENING_BRACES', token: '{' });
+        expect(tokens[18]).to.eql({ label: 'OPENING_BRACKET', token: '[' });
+        expect(tokens[20]).to.eql({ label: 'CLOSING_BRACKET', token: ']' });
+        expect(tokens[24]).to.eql({ label: 'OPENING_BRACES', token: '{' });
+        expect(tokens[32]).to.eql({ label: 'CLOSING_BRACES', token: '}' });
+        expect(tokens[39]).to.eql({ label: 'CLOSING_BRACES', token: '}' });
+    });
 });
